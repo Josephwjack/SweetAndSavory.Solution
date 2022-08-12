@@ -4,7 +4,7 @@ using SweetAndSavory.Models;
 using System.Threading.Tasks;
 using SweetAndSavory.ViewModels;
 
-namespace ToDoList.Controllers
+namespace SweetAndSavory.Controllers
 {
     public class AccountController : Controller
     {
@@ -36,7 +36,7 @@ namespace ToDoList.Controllers
             IdentityResult result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Login");
             }
             else
             {
