@@ -1,3 +1,18 @@
 @{
   Layout = "_Layout";
 }
+
+@model SweetAndSavory.Models.Flavor
+
+<h2>Add a new flavor</h2>
+<hr />
+@using (@Html.BeginForm())
+{
+  <div class="mb-3">
+    @Html.LabelFor(model => model.Name)
+    @Html.TextBoxFor(model => model.Name, new { required = "required" })
+  </div>
+  <input class="btn btn-dark" type="submit" value="Add Author" />
+}
+<hr />
+<p>@Html.ActionLink("Back to Flavors", "Index")</p>
