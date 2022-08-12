@@ -27,6 +27,7 @@ else
   <h1>All the treats at Pierre's Sweet & Savory </h1>
 }
 
+<hr />
 @if (Model.treats.Any())
 {
   <hr />
@@ -40,7 +41,7 @@ else
 }
 else
 {
-  <h3>No treats have been added to our index yet.</h3>
+  <h3>No other users have added any treats.</h3>
 }
 <hr />
 <p>@Html.ActionLink("Add new treat", "Create")</p>

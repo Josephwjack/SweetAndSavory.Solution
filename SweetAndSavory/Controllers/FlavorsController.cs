@@ -23,19 +23,21 @@ namespace SweetAndSavory.Controllers
       _db = db;
     }
 
+    [AllowAnonymous]
     public ActionResult Index()
     {
       ViewBag.PageTitle = "View all Flavors";
       return View(_db.Flavors.ToList());
     }
 
-    [AllowAnonymous]
+    [Authorize]
     public ActionResult Create()
     {
       ViewBag.PageTitle = "Add new Flavor";
       return View();
     }
 
+    [Authorize]
     [HttpPost]
     public ActionResult Create(Flavor flavor)
     {
@@ -47,6 +49,7 @@ namespace SweetAndSavory.Controllers
       return RedirectToAction("Index");
     }
 
+    [AllowAnonymous]
     public ActionResult Details(int id)
     {
       Flavor flavor = _db.Flavors.FirstOrDefault(f => f.FlavorId == id);
@@ -57,7 +60,7 @@ namespace SweetAndSavory.Controllers
     }
 
 
-     
+    [Authorize]
     [HttpPost]
     public ActionResult Details(FlavorTreat ft)
     {
@@ -69,7 +72,7 @@ namespace SweetAndSavory.Controllers
       return RedirectToAction("Details", new { id = ft.FlavorId });
     }
 
-    
+    [Authorize]
     public ActionResult Edit(int id)
     {
       Flavor flavor = _db.Flavors.FirstOrDefault(f => f.FlavorId == id);
@@ -77,7 +80,7 @@ namespace SweetAndSavory.Controllers
       return View(flavor);
     }
 
-    
+    [Authorize]
     [HttpPost]
     public ActionResult Edit(Flavor flavor)
     {
@@ -86,7 +89,7 @@ namespace SweetAndSavory.Controllers
       return RedirectToAction("Details", new { id = flavor.FlavorId });
     }
 
-   
+    [Authorize]
     public ActionResult Delete(int id)
     {
       Flavor flavor = _db.Flavors.FirstOrDefault(f => f.FlavorId == id);
@@ -94,6 +97,7 @@ namespace SweetAndSavory.Controllers
       return View(flavor);
     }
 
+    [Authorize]
     [HttpPost, ActionName("Delete")]
     public ActionResult Deleted(int id)
     {
@@ -103,7 +107,7 @@ namespace SweetAndSavory.Controllers
       return RedirectToAction("Index");
     }
 
-    
+    [Authorize]
     [HttpPost]
     public ActionResult DeleteFlavor(int flavorTreatId)
     {
