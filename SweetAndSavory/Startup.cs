@@ -5,9 +5,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using PROJECTNAME.Models;
+using SweetAndSavory.Models;
 
-namespace PROJECTNAME
+namespace SweetAndSavory
 {
   public class Startup
   {
@@ -26,10 +26,10 @@ namespace PROJECTNAME
     {
       services.AddMvc();
       services.AddEntityFrameworkMySql()
-        .AddDbContext<PROJECTNAMEContext>(options => options
+        .AddDbContext<SweetAndSavoryContext>(options => options
         .UseMySql(Configuration["ConnectionStrings:DefaultConnection"], ServerVersion.AutoDetect(Configuration["ConnectionStrings:DefaultConnection"])));
       services.AddIdentity<ApplicationUser, IdentityRole>()
-              .AddEntityFrameworkStores<PROJECTNAMEContext>()
+              .AddEntityFrameworkStores<SweetAndSavoryContext>()
               .AddDefaultTokenProviders();
       services.Configure<IdentityOptions>(options =>
       {
