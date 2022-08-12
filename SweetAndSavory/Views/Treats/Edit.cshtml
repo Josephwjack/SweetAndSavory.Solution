@@ -10,11 +10,13 @@
 
 @using (Html.BeginForm())
 {
+  <div class="mb-3">
   @Html.HiddenFor(model => model.TreatId)
 
   @Html.LabelFor(model => model.Name)
   @Html.EditorFor(model => model.Name)
 
+  </div>
 
   <input type="submit" value="Save" />
 }

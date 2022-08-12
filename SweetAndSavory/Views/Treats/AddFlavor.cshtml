@@ -10,10 +10,13 @@
 
 @using (Html.BeginForm())
 {
+  <div class="mb-3">
+
   @Html.HiddenFor(model => model.TreatId)
 
   @Html.Label("Select Flavor")
   @Html.DropDownList("FlavorId")
+  </div>
 
   <input type="submit" value="Add Flavor" class="btn btn-primary" />
 }

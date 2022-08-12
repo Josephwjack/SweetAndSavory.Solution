@@ -8,8 +8,10 @@
 
 @using (Html.BeginForm())
 {
+  <div class="mb-3">
   @Html.LabelFor(model => model.Name)
   @Html.TextBoxFor(model => model.Name)
+  </div>
 
   <input type="submit" value="Add new treat" class="btn btn-primary" />
 }
