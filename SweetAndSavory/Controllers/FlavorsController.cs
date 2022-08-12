@@ -56,6 +56,65 @@ namespace SweetAndSavory.Controllers
       return View(flavor);
     }
 
+
+     
+    [HttpPost]
+    public ActionResult Details(FlavorTreat ft)
+    {
+      if (_db.FlavorTreat.FirstOrDefault(f => f.FlavorId == ft.FlavorId && f.TreatId == ft.TreatId) == null)
+      {
+        _db.FlavorTreat.Add(ft);
+        _db.SaveChanges();
+      }
+      return RedirectToAction("Details", new { id = ft.FlavorId });
+    }
+
     
+    public ActionResult Edit(int id)
+    {
+      Flavor flavor = _db.Flavors.FirstOrDefault(f => f.FlavorId == id);
+      ViewBag.PageTitle = $"Edit {flavor.Name}";
+      return View(flavor);
+    }
+
+    
+    [HttpPost]
+    public ActionResult Edit(Flavor flavor)
+    {
+      _db.Entry(flavor).State = EntityState.Modified;
+      _db.SaveChanges();
+      return RedirectToAction("Details", new { id = flavor.FlavorId });
+    }
+
+   
+    public ActionResult Delete(int id)
+    {
+      Flavor flavor = _db.Flavors.FirstOrDefault(f => f.FlavorId == id);
+      ViewBag.PageTitle = $"Delete {flavor.Name}?";
+      return View(flavor);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    public ActionResult Deleted(int id)
+    {
+      Flavor flavor = _db.Flavors.FirstOrDefault(f => f.FlavorId == id);
+      _db.Flavors.Remove(flavor);
+      _db.SaveChanges();
+      return RedirectToAction("Index");
+    }
+
+    
+    [HttpPost]
+    public ActionResult DeleteFlavor(int flavorTreatId)
+    {
+      var ft = _db.FlavorTreat.FirstOrDefault(f => f.FlavorTreatId == flavorTreatId);
+      if (ft != null)
+      {
+        _db.FlavorTreat.Remove(ft);
+        _db.SaveChanges();
+      }
+      return RedirectToAction("Details", new { id = ft.FlavorId });
+    }
+
   }
 }
