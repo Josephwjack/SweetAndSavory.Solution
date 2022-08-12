@@ -1,0 +1,47 @@
+@{
+  Layout = "_Layout";
+}
+
+@using SweetAndSavory.Models;
+@model (IEnumerable<SweetAndSavory.Models.Treat> treats, IEnumerable<SweetAndSavory.Models.Treat> userTreats)
+
+@if (User.Identity.IsAuthenticated)
+{
+  <h1>Treats added by @User.Identity.Name</h1>
+  @if (Model.userTreats.Any())
+  {
+      <ul>
+      @foreach (Treat treat in Model.userTreats)
+      {
+        <li>@Html.ActionLink($"{treat.Name}", "Details", new { id = treat.TreatId })</li>
+      }
+    </ul>
+  }
+  else
+  {
+    <h3>User has not added any Treats.</h3>
+  }
+}
+else
+{
+  <h1>All the treats at Pierre's Sweet & Savory </h1>
+}
+
+@if (Model.treats.Any())
+{
+  <hr />
+  <h3>Treats added by other users.</h3>
+  <ul>
+    @foreach (Treat treat in Model.treats)
+    {
+      <li>@Html.ActionLink($"{treat.Name}", "Details", new { id = treat.TreatId })</li>
+    }
+  </ul>
+}
+else
+{
+  <h3>No treats have been added to our index yet.</h3>
+}
+<hr />
+<p>@Html.ActionLink("Add new treat", "Create")</p>
+<p>@Html.ActionLink("Go Back Home", "Index", "Home")</p>

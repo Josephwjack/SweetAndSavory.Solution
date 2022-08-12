@@ -1,0 +1,30 @@
+@{
+  Layout = "_Layout";
+}
+
+@using System.Security.Claims
+
+<h2>Welcome to Pierre's </h2>
+<p>Here you can create and organize your inventory.</p>
+<hr />
+
+@if (User.Identity.IsAuthenticated)
+{
+  <p>Hello @User.Identity.Name!</p>
+  @using (Html.BeginForm("LogOut", "Account"))
+  {
+    <input type="submit" class="btn btn-warning" value="Log out" />
+  }
+}
+else
+{
+  <p>@Html.ActionLink("Register", "Register")</p>
+  <p>@Html.ActionLink("Log in", "Login")</p>
+}
+<hr />
+
+@if (User)
+
+<p>@Html.ActionLink("Back to Home", "Index", "Home")</p>
+
+

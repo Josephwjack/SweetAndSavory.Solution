@@ -1,0 +1,38 @@
+@{
+  Layout = "_Layout";
+}
+
+@using System.Security.Claims
+@model IEnumerable<SweetAndSavory.Models.Treat>
+
+<h1>Welcome to the Pierre's Sweet & Savory!</h1>
+
+<hr />
+@* @using (@Html.BeginForm())
+{
+  <div class="mb-3">
+    <input type="text" name="SearchString" placeholder="Search for Titles or Authors" />
+    <input type="submit" value="Search" />
+  </div>
+} *@
+@if (Model.Any())
+{
+  <p>There are treats that match</p>
+}
+
+<div>
+  <p>@Html.ActionLink("View Treats", "Index", "Treats")</p>
+  <p>@Html.ActionLink("View Flavors", "Index", "Flavors")</p>
+  @* @if (User.Identity.IsAuthenticated)
+  {
+    @if (User.IsInRole("Librarian") && User.IsInRole("Admin"))
+    {
+      <p>@Html.ActionLink("Admin Portal", "ListRoles", "Administration")</p>
+    }
+    <p>@Html.ActionLink("Log out", "Index", "Account")</p>
+  }
+  else
+  {
+    <p>@Html.ActionLink("Create an account", "Index", "Account")</p>
+  } *@
+</div>
