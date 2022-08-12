@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
-using Library.Models;
+using SweetAndSavory.Models;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
@@ -9,136 +9,136 @@ using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using System.Security.Claims;
 
-namespace Library.Controllers
+namespace SweetAndSavory.Controllers
 {
-  [Authorize(Roles = "Librarian, Patron")]
-  public class BooksController : Controller
+  
+  public class TreatsController : Controller
   {
-    private readonly LibraryContext _db;
+    private readonly SweetAndSavoryContext _db;
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public BooksController(UserManager<ApplicationUser> userManager, LibraryContext db)
+    public TreatsController(UserManager<ApplicationUser> userManager, SweetAndSavoryContext db)
     {
       _userManager = userManager;
       _db = db;
     }
 
-    [AllowAnonymous]
+    
     public async Task<ActionResult> Index()
     {
       var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-      IEnumerable<Book> books = _db.Books.ToList();
+      IEnumerable<Treat> treats = _db.Treats.ToList();
       if (userId != null)
       {
         var currentUser = await _userManager.FindByIdAsync(userId);
-        IEnumerable<Book> userBooks = _db.Books.Where(book => book.User.Id == currentUser.Id).ToList();
-        books = _db.Books.Where(book => book.User.Id != currentUser.Id).ToList();
-        return View((books, userBooks));
+        IEnumerable<Treat> userTreats = _db.Treats.Where(treat => treat.User.Id == currentUser.Id).ToList();
+        treats = _db.Treats.Where(treat => treat.User.Id != currentUser.Id).ToList();
+        return View((treats, userTreats));
       }
-      IEnumerable<Book> emptyList = new List<Book>();
-      return View((books, emptyList));
+      IEnumerable<Treat> emptyList = new List<Treat>();
+      return View((treats, emptyList));
     }
 
-    [Authorize(Roles = "Librarian")]
+    
     public ActionResult Create()
     {
-      ViewBag.AuthorId = new SelectList(_db.Authors, "AuthorId", "Name");
+      ViewBag.FlavorId = new SelectList(_db.Flavors, "FlavorId", "Name");
       return View();
     }
 
-    [Authorize(Roles = "Librarian")]
+  
     [HttpPost]
-    public async Task<ActionResult> Create(Book book, int AuthorId)
+    public async Task<ActionResult> Create(Treat treat, int FlavorId)
     {
       var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       var currentUser = await _userManager.FindByIdAsync(userId);
-      book.User = currentUser;
-      _db.Books.Add(book);
+      treat.User = currentUser;
+      _db.Treats.Add(treat);
       _db.SaveChanges();
-      if (AuthorId != 0)
+      if (FlavorId != 0)
       {
-        _db.AuthorBook.Add(new AuthorBook() { AuthorId = AuthorId, BookId = book.BookId });
+        _db.FlavorTreat.Add(new FlavorTreat() { FlavorId = FlavorId, TreatId = treat.TreatId });
       }
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
 
-    [Authorize(Roles = "Librarian, Patron")]
+  
     public ActionResult Details(int id)
     {
-      var thisBook = _db.Books
-          .Include(book => book.JoinEntities)
-          .ThenInclude(join => join.Author)
-          .FirstOrDefault(book => book.BookId == id);
-      // var thisBook = _db.Books.FirstOrDefault(book => book.BookId == id);
-      ViewBag.Copies = _db.Copies.Where(copy => copy.BookId == id);
-      return View(thisBook);
+      var thisTreat = _db.Treats
+          .Include(treat => treat.JoinEntities)
+          .ThenInclude(join => join.Flavor)
+          .FirstOrDefault(treat => treat.TreatId == id);
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      ViewBag.IsCurrentUser = userId != null ? userId == thisTreat.User.Id : false;
+      return View(thisTreat);
     }
 
-    [Authorize(Roles = "Librarian")]
+ 
     public ActionResult Edit(int id)
     {
-      var thisBook = _db.Books.FirstOrDefault(book => book.BookId == id);
-      ViewBag.AuthorId = new SelectList(_db.Authors, "AuthorId", "Name");
-      return View(thisBook);
+      var thisTreat = _db.Treats.FirstOrDefault(treat => treat.TreatId == id);
+      ViewBag.FlavorId = new SelectList(_db.Flavors, "FlavorId", "Name");
+      return View(thisTreat);
     }
 
-    [Authorize(Roles = "Librarian")]
+    
     [HttpPost]
-    public ActionResult Edit(Book book, int AuthorId)
+    public ActionResult Edit(Treat treat, int FlavorId)
     {
-      if (AuthorId != 0)
+      if (FlavorId != 0)
       {
-        _db.AuthorBook.Add(new AuthorBook() { AuthorId = AuthorId, BookId = book.BookId });
+        _db.FlavorTreat.Add(new FlavorTreat() { FlavorId = FlavorId, TreatId = treat.TreatId });
       }
-      _db.Entry(book).State = EntityState.Modified;
+      _db.Entry(treat).State = EntityState.Modified;
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
 
-    [Authorize(Roles = "Librarian")]
-    public ActionResult AddAuthor(int id)
+    
+    public ActionResult AddFlavor(int id)
     {
-      var thisBook = _db.Books.FirstOrDefault(book => book.BookId == id);
-      ViewBag.AuthorId = new SelectList(_db.Authors, "AuthorId", "Name");
-      return View(thisBook);
+      var thisTreat = _db.Treats.FirstOrDefault(treat => treat.TreatId == id);
+      ViewBag.FlavorId = new SelectList(_db.Flavors, "FlavorId", "Name");
+      return View(thisTreat);
     }
 
-    [Authorize(Roles = "Librarian")]
+    
     [HttpPost]
-    public ActionResult AddAuthor(Book book, int AuthorId)
+    public ActionResult AddFlavor(Treat treat, int FlavorId)
     {
-      if (AuthorId != 0)
+      if (FlavorId != 0)
       {
-        _db.AuthorBook.Add(new AuthorBook() { AuthorId = AuthorId, BookId = book.BookId });
+        _db.FlavorTreat.Add(new FlavorTreat() { FlavorId = FlavorId, TreatId = treat.TreatId });
       }
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
 
-    [Authorize(Roles = "Librarian")]
+    
     public ActionResult Delete(int id)
     {
-      var thisBook = _db.Books.FirstOrDefault(book => book.BookId == id);
-      return View(thisBook);
+      var thisTreat = _db.Treats.FirstOrDefault(treat => treat.TreatId == id);
+      return View(thisTreat);
     }
 
-    [Authorize(Roles = "Librarian")]
+    
     [HttpPost, ActionName("Delete")]
-    public ActionResult DeleteConfirmed(int id)
+    public ActionResult Deleted(int id)
     {
-      var thisBook = _db.Books.FirstOrDefault(book => book.BookId == id);
-      _db.Books.Remove(thisBook);
+      var thisTreat = _db.Treats.FirstOrDefault(treat => treat.TreatId == id);
+      _db.Treats.Remove(thisTreat);
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
 
-    [Authorize(Roles = "Librarian")]
+    
     [HttpPost]
-    public ActionResult DeleteAuthor(int joinId)
+    public ActionResult DeleteFlavor(int joinId)
     {
-      var joinEntry = _db.AuthorBook.FirstOrDefault(entry => entry.AuthorBookId == joinId);
-      _db.AuthorBook.Remove(joinEntry);
+      var joinEntry = _db.FlavorTreat.FirstOrDefault(entry => entry.FlavorTreatId == joinId);
+      _db.FlavorTreat.Remove(joinEntry);
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
