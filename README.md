@@ -2,7 +2,7 @@
 
 #### By _**Joseph Jack**_  
 
-#### _This website allow the user to add engineers and machines to the factory database. Engineers and machines can both be assigned to multiple other entries or none at all. The application also allows the user to edit and delete any entries which will apply to the local database._
+#### _Pierre's Sweet and Savory is an application that allows the user to browse treats and flavors on Pierre's site. However users must register and login to have any create or editing ability._
 
 ---
 
@@ -73,7 +73,7 @@ This Setup assumes you have GitBash and MySQL Workbench pre-installed.
   <li>Open SQL Workbench.
   <li>Navigate to "sweet_and_savory" schema.
   <li>Click the drop down, select "Tables" drop down.
-  <li>Verify the tables, you should see <strong>restaurants</strong>, <strong>recipes</strong>, <strong>ingredients</strong>, <strong>reciperestaurant</strong>, & <strong>ingredientrecipe</strong>.
+  <li>Verify the tables, you should see <strong>flavors</strong>, <strong>treats</strong>, <strong>flavortreat</strong>.
   
 </details>
 
@@ -95,8 +95,6 @@ This program was built using *`Microsoft .NET SDK 5.0.401`*, and may not be comp
 
 * _No known issues_
 
-## License
+## Legal
 
-[MIT](https://opensource.org/licenses/MIT)
-
-Copyright (c) 8/12/2022 Joseph Jack
+_Copyright (c) 8/12/2022 Joseph Jack_
